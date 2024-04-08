@@ -1,0 +1,9 @@
+version: '3.6'
+
+include:
+  - ./wireguard/wireguard-compose.yaml
+  - ./traefik/traefik-compose.yaml
+  - ./nextcloud/nextcloud-compose.yaml
+#  - ./gitlab/gitlab-compose.yaml
+
+

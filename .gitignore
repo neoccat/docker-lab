@@ -1,0 +1,11 @@
+!docker-compose.yaml
+
+gitlab/*
+nextcloud/*
+traefik/*
+wireguard/*
+
+!gitlab/*.yaml
+!nextcloud/*.yaml
+!traefik/*.yaml
+!wireguard/*.yaml

@@ -1,0 +1,36 @@
+version: '3.6'
+
+services:
+  nextcloud_app:
+    depends_on:
+      - nextcloud_db
+      - traefik
+    image: nextcloud
+    container_name: nextcloud_app
+    restart: unless-stopped
+    ports:
+      - 83:80
+    env_file: .env
+    networks:
+      - nextcloud
+    volumes:
+      - ./nextcloud_data:/var/www/html
+      - nextcloud-webconf:/etc/apache2
+    labels:
+      - "traefik.http.routers.nextcloud_app.rule=Host(`nextcloud.example.com`)"
+
+  nextcloud_db:
+    image: postgres
+    container_name: nextcloud_db
+    env_file: .env
+    networks:
+      - nextcloud
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+volumes:
+  nextcloud-html:
+  nextcloud-webconf:
+
+networks:
+  nextcloud:
