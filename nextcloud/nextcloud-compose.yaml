@@ -12,25 +12,26 @@ services:
       - 83:80
     env_file: .env
     networks:
-      - nextcloud
+      - traefik_network
     volumes:
       - ./nextcloud_data:/var/www/html
       - nextcloud-webconf:/etc/apache2
     labels:
-      - "traefik.http.routers.nextcloud_app.rule=Host(`nextcloud.example.com`)"
+      - "traefik.http.routers.nextcloud_app.rule=Host(`homelab.nextcloud.local`)"
 
   nextcloud_db:
     image: postgres
     container_name: nextcloud_db
     env_file: .env
     networks:
-      - nextcloud
+      - traefik_network
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+networks:
+  traefik_network:
+    external: true
 
 volumes:
   nextcloud-html:
   nextcloud-webconf:
-
-networks:
-  nextcloud:

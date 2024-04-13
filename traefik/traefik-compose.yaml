@@ -3,15 +3,15 @@ services:
   traefik:
     image: "traefik:v2.11"
     container_name: "traefik"
-    command: --api.insecure=true --providers.docker
+    command: --api.insecure=true --providers.docker.network=traefik
     ports:
-      - "81:80"
+      - "80:80"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik_network
 
-  whoami:
-    # A container that exposes an API to show its IP address
-    image: traefik/whoami
-    labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+networks:
+  traefik_network:
+    external: true
