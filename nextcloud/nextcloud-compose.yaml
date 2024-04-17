@@ -17,14 +17,20 @@ services:
       - ./nextcloud_data:/var/www/html
       - nextcloud-webconf:/etc/apache2
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.myredirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.nextcloud_app.middlewares=myredirect"
       - "traefik.http.routers.nextcloud_app.rule=Host(`homelab.nextcloud.local`)"
+      - "traefik.http.routers.nextcloud_app.entrypoints=web"
+      - "traefik.http.routers.nextcloud_app-secure.rule=Host(`homelab.nextcloud.local`)"
+      - "traefik.http.routers.nextcloud_app-secure.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud_app-secure.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.nextcloud_app-secure.tls=true"
 
   nextcloud_db:
     image: postgres
     container_name: nextcloud_db
     env_file: .env
-    networks:
-      - traefik_network
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
 
