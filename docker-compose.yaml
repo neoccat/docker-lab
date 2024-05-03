@@ -2,8 +2,10 @@ version: '3.6'
 
 include:
   - ./wireguard/wireguard-compose.yaml
+  - ./postgres/postgres-compose.yaml
   - ./traefik/traefik-compose.yaml
   - ./nextcloud/nextcloud-compose.yaml
+  - ./mattermost/mattermost-compose.yaml
 #  - ./gitlab/gitlab-compose.yaml
 
 

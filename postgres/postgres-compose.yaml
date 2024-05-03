@@ -1,0 +1,18 @@
+version: "3.6"
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file: .env
+    networks:
+      - traefik_network
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  traefik_network:
+    external: true

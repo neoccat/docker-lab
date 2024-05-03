@@ -4,8 +4,10 @@ gitlab/*
 nextcloud/*
 traefik/*
 wireguard/*
+mattermost/*
 
 !gitlab/*.yaml
 !nextcloud/*.yaml
 !traefik/*.yaml
 !wireguard/*.yaml
+!mattermost/*.yaml

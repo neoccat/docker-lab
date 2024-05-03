@@ -3,14 +3,14 @@ version: '3.6'
 services:
   nextcloud_app:
     depends_on:
-      - nextcloud_db
+      - postgres
       - traefik
-    image: nextcloud
+    image: nextcloud:28.0.5
     container_name: nextcloud_app
     restart: unless-stopped
     ports:
       - 83:80
-    env_file: .env
+    env_file: ../postgres/.env
     networks:
       - traefik_network
     volumes:
@@ -26,13 +26,6 @@ services:
       - "traefik.http.routers.nextcloud_app-secure.entrypoints=websecure"
       - "traefik.http.routers.nextcloud_app-secure.tls.certresolver=myhttpchallenge"
       - "traefik.http.routers.nextcloud_app-secure.tls=true"
-
-  nextcloud_db:
-    image: postgres
-    container_name: nextcloud_db
-    env_file: .env
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
 
 networks:
   traefik_network:

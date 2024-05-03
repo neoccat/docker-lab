@@ -1,0 +1,40 @@
+version: "3.6"
+
+services:
+  mattermost:
+    depends_on:
+      - postgres
+    image: mattermost/mattermost-team-edition
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    tmpfs:
+      - /tmp
+    networks:
+      - traefik_network
+    volumes:
+      - ./config:/mattermost/config:rw
+      - ./data:/mattermost/data:rw
+      - ./logs:/mattermost/logs:rw
+      - ./plugins:/mattermost/plugins:rw
+      - ./client-plugins:/mattermost/client/plugins:rw
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.myredirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.mattermost.middlewares=myredirect"
+      - "traefik.http.routers.mattermost.rule=Host(`homelab.mattermost.local`)"
+      - "traefik.http.routers.mattermost.entrypoints=web"
+      - "traefik.http.routers.mattermost-secure.rule=Host(`homelab.mattermost.local`)"
+      - "traefik.http.routers.mattermost-secure.entrypoints=websecure"
+      - "traefik.http.routers.mattermost-secure.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.mattermost-secure.tls=true"
+    environment:
+      - MM_USERNAME=postgres
+      - MM_PASSWORD=postgres
+      - MM_DBNAME=mattermost
+      - MM_SQLSETTINGS_DATASOURCE=postgres://postgres:postgres@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+
+networks:
+  traefik_network:
+    external: true
